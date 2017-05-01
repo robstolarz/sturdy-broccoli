@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: run_motion
+Description: Description of run_motion
+Version: 1.0.0
+Cflags: 
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: 

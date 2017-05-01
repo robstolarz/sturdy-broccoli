@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: joint_state_controller
+Description: Description of joint_state_controller
+Version: 0.2.4
+Cflags: -I/root/tiago_public_ws/src/ros_controllers/joint_state_controller/include
+Libs: -L/root/tiago_public_ws/devel/lib -ljoint_state_controller
+Requires: realtime_tools roscpp hardware_interface pluginlib controller_interface sensor_msgs

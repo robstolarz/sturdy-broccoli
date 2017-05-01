@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: pmb2_controller_configuration_gazebo
+Description: Description of pmb2_controller_configuration_gazebo
+Version: 1.0.0
+Cflags: 
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: 

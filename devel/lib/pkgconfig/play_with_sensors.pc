@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: play_with_sensors
+Description: Description of play_with_sensors
+Version: 0.0.0
+Cflags: 
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: 

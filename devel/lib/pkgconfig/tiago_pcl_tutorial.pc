@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: tiago_pcl_tutorial
+Description: Description of tiago_pcl_tutorial
+Version: 0.0.0
+Cflags: -I/root/tiago_public_ws/devel/include
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: roscpp dynamic_reconfigure sensor_msgs

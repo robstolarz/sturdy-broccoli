@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: pal_hardware_gazebo
+Description: Description of pal_hardware_gazebo
+Version: 0.0.6
+Cflags: -I/root/tiago_public_ws/src/pal_hardware_gazebo/include -I/usr/include/eigen3
+Libs: -L/root/tiago_public_ws/devel/lib -lpal_hardware_gazebo
+Requires: control_toolbox hardware_interface joint_limits_interface gazebo_ros_control

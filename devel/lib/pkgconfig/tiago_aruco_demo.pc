@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: tiago_aruco_demo
+Description: Description of tiago_aruco_demo
+Version: 0.0.0
+Cflags: 
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: 

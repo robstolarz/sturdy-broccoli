@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: aruco_ros
+Description: Description of aruco_ros
+Version: 0.2.0
+Cflags: -I/root/tiago_public_ws/devel/include -I/root/tiago_public_ws/src/aruco_ros/aruco_ros/include
+Libs: -L/root/tiago_public_ws/devel/lib -laruco
+Requires: 

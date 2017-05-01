@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: pal_gripper_controller_configuration
+Description: Description of pal_gripper_controller_configuration
+Version: 0.0.9
+Cflags: 
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: 

@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: tiago_2dnav
+Description: Description of tiago_2dnav
+Version: 0.9.8
+Cflags: 
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: 

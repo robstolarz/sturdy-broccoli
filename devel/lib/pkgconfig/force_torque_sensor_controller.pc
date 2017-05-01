@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: force_torque_sensor_controller
+Description: Description of force_torque_sensor_controller
+Version: 0.2.4
+Cflags: -I/root/tiago_public_ws/src/ros_controllers/force_torque_sensor_controller/include
+Libs: -L/root/tiago_public_ws/devel/lib -lforce_torque_sensor_controller
+Requires: controller_interface hardware_interface geometry_msgs realtime_tools

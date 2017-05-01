@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: aaron_cv_test
+Description: Description of aaron_cv_test
+Version: 0.0.0
+Cflags: 
+Libs: -L/root/tiago_public_ws/devel/lib -laaron_cv_test
+Requires: roscpp rospy image_transport cv_bridge pal_detection_msgs geometry_msgs message_generation

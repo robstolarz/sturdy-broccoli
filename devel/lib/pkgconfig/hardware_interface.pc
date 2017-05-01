@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: hardware_interface
+Description: Description of hardware_interface
+Version: 0.2.2
+Cflags: -I/root/tiago_public_ws/src/ros_control/hardware_interface/include
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: roscpp

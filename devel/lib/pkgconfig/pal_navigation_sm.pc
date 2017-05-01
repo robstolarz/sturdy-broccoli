@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: pal_navigation_sm
+Description: Description of pal_navigation_sm
+Version: 0.1.7
+Cflags: 
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: 

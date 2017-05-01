@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: position_controllers
+Description: Description of position_controllers
+Version: 0.2.4
+Cflags: -I/root/tiago_public_ws/src/ros_controllers/position_controllers/include
+Libs: -L/root/tiago_public_ws/devel/lib -lposition_controllers
+Requires: controller_interface forward_command_controller

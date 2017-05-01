@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: controller_manager_tests
+Description: Description of controller_manager_tests
+Version: 0.2.2
+Cflags: -I/root/tiago_public_ws/src/ros_control/controller_manager_tests/include
+Libs: -L/root/tiago_public_ws/devel/lib -lcontroller_manager_tests
+Requires: controller_manager controller_interface control_toolbox

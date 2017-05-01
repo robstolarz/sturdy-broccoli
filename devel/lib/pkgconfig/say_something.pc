@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: say_something
+Description: Description of say_something
+Version: 0.0.0
+Cflags: 
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: 

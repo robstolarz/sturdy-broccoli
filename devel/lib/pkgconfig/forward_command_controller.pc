@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: forward_command_controller
+Description: Description of forward_command_controller
+Version: 0.2.4
+Cflags: -I/root/tiago_public_ws/src/ros_controllers/forward_command_controller/include
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: controller_interface hardware_interface std_msgs

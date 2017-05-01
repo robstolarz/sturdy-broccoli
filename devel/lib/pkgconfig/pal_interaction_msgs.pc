@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: pal_interaction_msgs
+Description: Description of pal_interaction_msgs
+Version: 0.11.3
+Cflags: -I/root/tiago_public_ws/devel/include
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: message_runtime

@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: tiago_pick_demo
+Description: Description of tiago_pick_demo
+Version: 0.0.0
+Cflags: -I/root/tiago_public_ws/devel/include
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: 

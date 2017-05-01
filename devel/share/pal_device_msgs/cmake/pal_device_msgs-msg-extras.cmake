@@ -1,0 +1,2 @@
+set(pal_device_msgs_MESSAGE_FILES "/root/tiago_public_ws/src/pal_msgs/pal_device_msgs/msg/BatteryState.msg;/root/tiago_public_ws/src/pal_msgs/pal_device_msgs/msg/Bumper.msg;/root/tiago_public_ws/src/pal_msgs/pal_device_msgs/msg/LedGroup.msg")
+set(pal_device_msgs_SERVICE_FILES "/root/tiago_public_ws/src/pal_msgs/pal_device_msgs/srv/CancelEffect.srv;/root/tiago_public_ws/src/pal_msgs/pal_device_msgs/srv/TimedBlinkEffect.srv;/root/tiago_public_ws/src/pal_msgs/pal_device_msgs/srv/TimedColourEffect.srv;/root/tiago_public_ws/src/pal_msgs/pal_device_msgs/srv/TimedFadeEffect.srv")

@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: tf_lookup
+Description: Description of tf_lookup
+Version: 0.0.1
+Cflags: -I/root/tiago_public_ws/devel/include -I/root/tiago_public_ws/src/tf_lookup/include
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: tf

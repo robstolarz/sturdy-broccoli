@@ -1,0 +1,8 @@
+prefix=/root/tiago_public_ws/devel
+
+Name: pmb2_bringup
+Description: Description of pmb2_bringup
+Version: 1.1.6
+Cflags: 
+Libs: -L/root/tiago_public_ws/devel/lib 
+Requires: 
