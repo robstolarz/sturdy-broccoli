@@ -91,12 +91,24 @@ void CameraTest::processImage()
 		return;
 	cv::Mat m1 = m->clone();
 	cv::Mat m2 = m->clone();
+	cv::Mat mapEdges(*m);
 	cv::bitwise_and(m1, cv::Scalar(1 << 7), m1);
 	cv::threshold(m2, m2, 0, 255, cv::THRESH_BINARY);
 	cv::Canny(m1, m1, (double)100, (double)cannyHigh, 3);
 	cv::Canny(m2, m2, (double)100, (double)cannyHigh, 3);
+	cv::bitwise_and(m1, m2, mapEdges);
+	
+	std::vector<std::vector<cv::Point> > contours;
+	std::vector<cv::Vec4i> hierarchy;
+	cv::findContours(mapEdges, contours, hierarchy, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
 
-	cv::bitwise_and(m1, m2, *edges);
+	for (int i = 0; i < contours.size(); i++) {
+		// shitty comment
+		cv::Scalar color = cv::Scalar(255,0,0);
+		for (int j = 0; j < contours[i].size(); j++ ) {
+			cv::circle(*edges, contours[i][j], 4, color);
+		}
+	}
 }
 
 void CameraTest::show_monitor()
