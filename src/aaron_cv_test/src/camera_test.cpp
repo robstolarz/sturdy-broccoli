@@ -127,7 +127,7 @@ void CameraTest::processImage()
 	for (unsigned int i = 0; i < contours.size(); i++) {
 		// shitty comment
 		for (unsigned int j = 0; j < contours[i].size() && contours[i].size() > 50; j++ ) {
-			double distance = sqrt(pow(x-contours[i][j].x,2) + pow(y-contours[i][j].y,2));
+			double distance = pow(x-contours[i][j].x,2) + pow(y-contours[i][j].y,2);
 			if((distance < nearestDistance && distance > 1) || nearestDistance < 0) {
 				nearestDistance = distance;
 				nearestPoint = contours[i][j];
