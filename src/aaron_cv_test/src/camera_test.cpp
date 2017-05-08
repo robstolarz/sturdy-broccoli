@@ -4,6 +4,8 @@
 #include <cv_bridge/cv_bridge.h>
 #include <sensor_msgs/image_encodings.h>
 #include <sensor_msgs/Image.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/Pose.h>
 #include <image_transport/image_transport.h>
 #include <nav_msgs/OccupancyGrid.h>
 #include <tf/transform_listener.h>
@@ -20,12 +22,15 @@ class CameraTest
 		~CameraTest();
 
 		ros::Subscriber sub;
+		ros::Publisher navGoalPublisher;
 		tf::TransformListener tfListener;
-	  tf::StampedTransform transform;
+		tf::StampedTransform transform;
 		void show_monitor();
 		void processImage();
 		cv::Mat *m;
 		cv::Mat *edges;
+		cv::Point goal;
+		bool stillSearching;
 	private:
 		void imageCB(const nav_msgs::OccupancyGrid::ConstPtr& msg);
 		bool fml;
@@ -45,13 +50,13 @@ CameraTest::CameraTest(ros::NodeHandle nh_)
 	// Construct here!
 
 	sub = nh_.subscribe("/vo_map", 1, &CameraTest::imageCB, this, ros::TransportHints().reliable());
+	navGoalPublisher = nh_.advertise<geometry_msgs::PoseStamped>("/move_base_simple/goal", 1000);
 
+	stillSearching = true;
 
 	// Create camera preview window
 	printf("OpenCV Loaded!\n");
 	cv::namedWindow("edgy af", CV_WINDOW_FREERATIO);
-	cv::createTrackbar("low", "edgy af", &cannyLow, 1000, f);
-	cv::createTrackbar("high", "edgy af", &cannyHigh, 1000, f);
 
 	fml = false;
 	m = new cv::Mat();
@@ -117,19 +122,41 @@ void CameraTest::processImage()
  	int x = (transform.getOrigin().x()-xOffset)/mapRes;
 	int y = (transform.getOrigin().y()-yOffset)/mapRes;
 	cv::circle(*edges, cv::Point(x,y), 20, cv::Scalar(255,0,0));
-
-	for (int i = 0; i < contours.size(); i++) {
-		// shitty comment
-		for (int j = 0; j < contours[i].size(); j++ ) {
-			double distance = sqrt(pow(x-contours[i][j].x,2) + pow(y-contours[i][j].y,2));
-			if(distance < nearestDistance || nearestDistance < 0) {
-				nearestDistance = distance;
-				nearestPoint = contours[i][j];
+	
+	//edges->at<uchar>(goal.x, goal.y)
+	//if(edges->at<uchar>(goal.x, goal.y) == 0) {
+		stillSearching = false;
+		for (unsigned int i = 0; i < contours.size(); i++) {
+			// shitty comment
+			for (unsigned int j = 0; j < contours[i].size() && contours[i].size() > 50; j++ ) {
+				double distance = sqrt(pow(x-contours[i][j].x,2) + pow(y-contours[i][j].y,2));
+				if((distance < nearestDistance && distance > 1) || nearestDistance < 0) {
+					nearestDistance = distance;
+					nearestPoint = contours[i][j];
+					stillSearching = true;
+				}
+				//cv::circle(*edges, contours[i][j], 4, cv::Scalar(255,0,0));
 			}
-			//cv::circle(*edges, contours[i][j], 4, cv::Scalar(255,0,0));
 		}
-	}
-	cv::circle(*edges, nearestPoint, 10, cv::Scalar(255,0,0));
+
+		if(nearestPoint.x != goal.x && nearestPoint.y != goal.y) {
+			geometry_msgs::PoseStamped msg;
+
+			msg.pose.position.x = nearestPoint.x*mapRes+xOffset;
+			msg.pose.position.y = nearestPoint.y*mapRes+xOffset;
+			msg.pose.orientation.w = 1;
+			msg.header.frame_id = "map";
+			navGoalPublisher.publish(msg);
+
+			goal.x = nearestPoint.x;
+			goal.y = nearestPoint.y;
+		}
+	//}
+
+	printf("goal, x: %i, y: %i \n", goal.x, goal.y);
+	printf("current, x: %i, y: %i \n", x, y);
+	cv::circle(*edges, goal, 10, cv::Scalar(255,0,0));
+	
 }
 
 void CameraTest::show_monitor()
@@ -148,6 +175,7 @@ int main(int argc, char** argv)
 	ros::init(argc, argv, "CameraTest");
 	ros::NodeHandle nh;
 	CameraTest cam(nh);
+	ros::Rate loop_rate(1);
 	while(true) {
 		try{
 			cam.tfListener.lookupTransform("/map", "/base_footprint", ros::Time(0), cam.transform);
@@ -158,6 +186,7 @@ int main(int argc, char** argv)
 		}
 		ros::spinOnce();
 		cam.processImage();
-		cam.show_monitor();
+		cam.show_monitor(); 
+		//loop_rate.sleep();
 	}
 }

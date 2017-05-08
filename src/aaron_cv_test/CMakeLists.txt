@@ -37,6 +37,3 @@ add_executable(camera_test src/camera_test.cpp)
 target_link_libraries(camera_test ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 add_dependencies(camera_test ${PROJECT_NAME}_generate_messages_cpp)
 
-add_executable(turtle_tf_listener src/turtle_tf_listener.cpp)
-target_link_libraries(turtle_tf_listener ${catkin_LIBRARIES})
-add_dependencies(turtle_tf_listener ${PROJECT_NAME}_generate_messages_cpp)
