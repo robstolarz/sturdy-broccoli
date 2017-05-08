@@ -123,35 +123,48 @@ void CameraTest::processImage()
 	int y = (transform.getOrigin().y()-yOffset)/mapRes;
 	cv::circle(*edges, cv::Point(x,y), 20, cv::Scalar(255,0,0));
 	
-	//edges->at<uchar>(goal.x, goal.y)
-	//if(edges->at<uchar>(goal.x, goal.y) == 0) {
-		stillSearching = false;
-		for (unsigned int i = 0; i < contours.size(); i++) {
-			// shitty comment
-			for (unsigned int j = 0; j < contours[i].size() && contours[i].size() > 50; j++ ) {
-				double distance = sqrt(pow(x-contours[i][j].x,2) + pow(y-contours[i][j].y,2));
-				if((distance < nearestDistance && distance > 1) || nearestDistance < 0) {
-					nearestDistance = distance;
-					nearestPoint = contours[i][j];
-					stillSearching = true;
-				}
-				//cv::circle(*edges, contours[i][j], 4, cv::Scalar(255,0,0));
+	stillSearching = false;
+	for (unsigned int i = 0; i < contours.size(); i++) {
+		// shitty comment
+		for (unsigned int j = 0; j < contours[i].size() && contours[i].size() > 50; j++ ) {
+			double distance = sqrt(pow(x-contours[i][j].x,2) + pow(y-contours[i][j].y,2));
+			if((distance < nearestDistance && distance > 1) || nearestDistance < 0) {
+				nearestDistance = distance;
+				nearestPoint = contours[i][j];
+				stillSearching = true;
 			}
+			//cv::circle(*edges, contours[i][j], 4, cv::Scalar(255,0,0));
 		}
-
+	}
+	if(stillSearching) {
 		if(nearestPoint.x != goal.x && nearestPoint.y != goal.y) {
+			goal.x = nearestPoint.x;
+			goal.y = nearestPoint.y;
+
 			geometry_msgs::PoseStamped msg;
 
-			msg.pose.position.x = nearestPoint.x*mapRes+xOffset;
-			msg.pose.position.y = nearestPoint.y*mapRes+xOffset;
+			msg.pose.position.x = goal.x*mapRes+xOffset;
+			msg.pose.position.y = goal.y*mapRes+xOffset;
 			msg.pose.orientation.w = 1;
 			msg.header.frame_id = "map";
 			navGoalPublisher.publish(msg);
 
-			goal.x = nearestPoint.x;
-			goal.y = nearestPoint.y;
 		}
-	//}
+	} else {
+
+		goal.x = 999;
+		goal.y = 999;
+
+		geometry_msgs::PoseStamped msg;
+
+		msg.pose.position.x = goal.x*mapRes+xOffset;
+		msg.pose.position.y = goal.y*mapRes+xOffset;
+		msg.pose.orientation.w = 1;
+		msg.header.frame_id = "map";
+		navGoalPublisher.publish(msg);
+
+		printf("done?\n");
+	}
 
 	printf("goal, x: %i, y: %i \n", goal.x, goal.y);
 	printf("current, x: %i, y: %i \n", x, y);
@@ -175,8 +188,7 @@ int main(int argc, char** argv)
 	ros::init(argc, argv, "CameraTest");
 	ros::NodeHandle nh;
 	CameraTest cam(nh);
-	ros::Rate loop_rate(1);
-	while(true) {
+	while(cam.stillSearching) {
 		try{
 			cam.tfListener.lookupTransform("/map", "/base_footprint", ros::Time(0), cam.transform);
 		}
@@ -186,7 +198,6 @@ int main(int argc, char** argv)
 		}
 		ros::spinOnce();
 		cam.processImage();
-		cam.show_monitor(); 
-		//loop_rate.sleep();
+		cam.show_monitor(); 	
 	}
 }
