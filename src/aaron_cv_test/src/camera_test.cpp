@@ -28,6 +28,7 @@ class CameraTest
 		void show_monitor();
 		void processImage();
 		cv::Mat *m;
+		cv::Mat *displayM;
 		cv::Mat *edges;
 		cv::Point goal;
 		bool stillSearching;
@@ -60,6 +61,7 @@ CameraTest::CameraTest(ros::NodeHandle nh_)
 
 	fml = false;
 	m = new cv::Mat();
+	displayM = new cv::Mat();
 	edges = new cv::Mat();
 }
 
@@ -103,6 +105,8 @@ void CameraTest::processImage()
 		return;
 	if(!m)
 		return;
+	delete edges;
+	edges = new cv::Mat();
 	cv::Mat m1 = m->clone();
 	cv::Mat m2 = m->clone();
 	cv::bitwise_and(m1, cv::Scalar(1 << 7), m1);
@@ -110,6 +114,7 @@ void CameraTest::processImage()
 	cv::Canny(m1, m1, (double)100, (double)cannyHigh, 3);
 	cv::Canny(m2, m2, (double)100, (double)cannyHigh, 3);
 	cv::bitwise_and(m1, m2, *edges);
+	// cv::dilate(*edges, *edges, cv::Mat(), cv::Point(-1, -1), 2, 1, 1);
 
 	std::vector<std::vector<cv::Point> > contours;
 	std::vector<cv::Vec4i> hierarchy;
@@ -119,10 +124,9 @@ void CameraTest::processImage()
 	cv::Point nearestPoint;
 	double nearestDistance = -1;
 
- 	int x = (transform.getOrigin().x()-xOffset)/mapRes;
+	int x = (transform.getOrigin().x()-xOffset)/mapRes;
 	int y = (transform.getOrigin().y()-yOffset)/mapRes;
-	cv::circle(*edges, cv::Point(x,y), 20, cv::Scalar(255,0,0));
-	
+
 	stillSearching = false;
 	for (unsigned int i = 0; i < contours.size(); i++) {
 		// shitty comment
@@ -133,6 +137,7 @@ void CameraTest::processImage()
 				nearestPoint = contours[i][j];
 				stillSearching = true;
 			}
+			std::cout << "contour" << std::endl;
 			//cv::circle(*edges, contours[i][j], 4, cv::Scalar(255,0,0));
 		}
 	}
@@ -168,8 +173,26 @@ void CameraTest::processImage()
 
 	printf("goal, x: %i, y: %i \n", goal.x, goal.y);
 	printf("current, x: %i, y: %i \n", x, y);
-	cv::circle(*edges, goal, 10, cv::Scalar(255,0,0));
+
+	cv::Mat displayM_full;
+	cv::Mat someZeros = cv::Mat::zeros(m->size(),CV_8UC1);
 	
+	std::vector<cv::Mat> displayChannels;
+	
+
+	displayChannels.push_back(m1);
+	displayChannels.push_back(someZeros);
+	displayChannels.push_back(m2);
+
+	cv::merge(displayChannels, displayM_full);
+
+	cv::circle(displayM_full, goal, 10, cv::Scalar(255,0,0));
+	cv::circle(displayM_full, cv::Point(x,y), 20, cv::Scalar(255,0,0));
+	delete displayM;
+	displayM = new cv::Mat();
+	int cropSize = 600;
+	cv::Rect cropArea(1000-cropSize/2, 1000-cropSize/2, cropSize, cropSize);
+	*displayM = displayM_full(cropArea);
 }
 
 void CameraTest::show_monitor()
@@ -178,7 +201,7 @@ void CameraTest::show_monitor()
 		return;
 	if(!m)
 		return;
-	cv::imshow("edgy af", *edges);
+	cv::imshow("edgy af", *displayM);
 	cv::waitKey(1);
 }
 
@@ -197,7 +220,7 @@ int main(int argc, char** argv)
 			ros::Duration(1.0).sleep();
 		}
 		ros::spinOnce();
-		cam.processImage();
-		cam.show_monitor(); 	
+		// cam.processImage();
+		cam.show_monitor();
 	}
 }
